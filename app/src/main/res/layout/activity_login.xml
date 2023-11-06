@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <Button
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/baseline_login_24"
+        android:text="Continue with E-mail"
+        app:layout_constraintTop_toTopOf="@+id/gl"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/login_google"
+        android:layout_marginHorizontal="30dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="10dp"
+        />
+
+    <Button
+        android:id="@+id/login_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/baseline_email_24"
+        android:text="Google"
+        app:layout_constraintTop_toBottomOf="@+id/login_email"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/login_facebook"
+        app:layout_constraintBottom_toTopOf="@+id/sap"
+        android:paddingHorizontal="20dp"
+        android:layout_marginRight="20dp"
+
+         />
+
+    <Button
+        android:id="@+id/login_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Facebook"
+        android:drawableLeft="@drawable/baseline_groups_24"
+        app:layout_constraintTop_toBottomOf="@id/login_email"
+        app:layout_constraintLeft_toRightOf="@+id/login_google"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sap"
+        app:layout_constraintBaseline_toBaselineOf="@id/login_google"
+        android:paddingHorizontal="20dp"
+         />
+
+    <TextView
+        android:id="@+id/sap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_google"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="By continuing you agree to our terms"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/cardview_dark_background"
+        android:padding="10dp"
+         />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="246dp"
+        app:srcCompat="@drawable/vectorstock_38067618_transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/gl"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.appdesign;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.utility.UtilityKeyboard;
 
@@ -18,7 +20,8 @@ public class EmailLoginActivity extends AppCompatActivity {
 
     private EditText editTextEmailAddress;
     private EditText editTextPassword;
-    private boolean isPwVsb = false;
+
+    private TextView textViewLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +30,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         View rootLayout = findViewById(R.id.rootLayout);
         editTextEmailAddress = findViewById(R.id.editTextEmailAddress);
         editTextPassword = findViewById(R.id.editTextPassword);
+        textViewLink = findViewById(R.id.linkTextView);
 
 
         rootLayout.setOnTouchListener((view, motionEvent) -> {
@@ -53,6 +57,11 @@ public class EmailLoginActivity extends AppCompatActivity {
                 }
             }
             return false;
+        });
+
+        textViewLink.setOnClickListener(view -> {
+            Intent intent = new Intent(EmailLoginActivity.this, EmailRegisterActivity.class);
+            startActivity(intent);
         });
     }
 

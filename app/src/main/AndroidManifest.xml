@@ -13,21 +13,21 @@
         android:theme="@style/Theme.AppDesign"
         tools:targetApi="31">
         <activity
+            android:name=".EmailRegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".EmailLoginActivity"
             android:exported="false"
             android:label="Login By Email"
             android:theme="@style/AppThemeWithActionBar">
             <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".LoginActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:exported="false"
-            android:theme="@style/Base.Theme.AppDesign.Background"
-            />
-
+            android:theme="@style/Base.Theme.AppDesign.Background" />
         <activity
             android:name=".StartActivity"
             android:exported="true"

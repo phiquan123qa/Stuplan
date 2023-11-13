@@ -1,20 +1,15 @@
-package com.example.appdesign;
+package com.vn.appdesign;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.utility.UtilityKeyboard;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.vn.utility.UtilityKeyboard;
 
 public class EmailLoginActivity extends AppCompatActivity {
 

@@ -1,11 +1,12 @@
-package com.example.utility;
+package com.vn.utility;
 
 import android.app.Activity;
 import android.text.InputType;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.example.appdesign.R;
+import com.vn.appdesign.R;
+
 
 public class UtilityKeyboard {
     public static void hideSoftKeyboard(Activity activity) {

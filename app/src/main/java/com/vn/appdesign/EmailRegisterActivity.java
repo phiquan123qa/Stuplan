@@ -1,4 +1,4 @@
-package com.example.appdesign;
+package com.vn.appdesign;
 
 import androidx.appcompat.app.AppCompatActivity;
 

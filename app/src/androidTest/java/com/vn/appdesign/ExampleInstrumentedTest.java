@@ -1,4 +1,4 @@
-package com.example.appdesign;
+package com.vn.appdesign;
 
 import android.content.Context;
 

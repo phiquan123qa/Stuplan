@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class FacebookAuthActivity extends LoginActivity {
     CallbackManager callbackManager;
@@ -31,7 +32,7 @@ public class FacebookAuthActivity extends LoginActivity {
         setContentView(R.layout.activity_facebook_auth);
         callbackManager = CallbackManager.Factory.create();
 
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("email"));
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override

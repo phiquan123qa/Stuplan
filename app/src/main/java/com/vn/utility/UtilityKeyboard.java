@@ -13,7 +13,7 @@ public class UtilityKeyboard {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isAcceptingText()){
+        if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
                     activity.getCurrentFocus().getWindowToken(),
                     0
@@ -21,7 +21,7 @@ public class UtilityKeyboard {
         }
     }
 
-    public static void clearData(EditText editText){
+    public static void clearData(EditText editText) {
         editText.getText().clear();
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppDesign</string>
+    <string name="app_name">Stuplan</string>
     <string name="title_activity_login_email">LoginEmailActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

@@ -2,14 +2,20 @@ package com.vn.utility;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +23,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.vn.Models.User;
+import com.vn.appdesign.EmailLoginActivity;
+import com.vn.appdesign.EmailRegisterActivity;
 import com.vn.appdesign.HomeActivity;
 import com.vn.appdesign.LoginActivity;
 
@@ -78,10 +86,54 @@ public class AuthenHandle {
                     }
                 });
     }
-    public static void updateUI(LoginActivity activity, FirebaseUser user) {
+    public static void handleCreateUserByEmailPassword(EmailRegisterActivity activity, String email, String password){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity, task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        assert user != null;
+                        User userAuth = new User(user.getUid(), user.getEmail(), null);
+                        database.child("USERS")
+                                .child(user.getUid())
+                                .setValue(userAuth)
+                                .addOnCompleteListener(writeTask -> {
+                                    if (writeTask.isSuccessful()) {
+                                        updateUI(activity,user);
+                                    } else {
+                                        Toast.makeText(activity, "Failed to write data to the database: " + writeTask.getException(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                        Toast.makeText(activity, "Success", Toast.LENGTH_SHORT).show();
+                    }
+                     else {
+                        Toast.makeText(activity, task.toString(), Toast.LENGTH_SHORT).show();}
+                });
+    }
+
+    public static void handleLoginByEmailPassword(EmailLoginActivity activity, String email, String password){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity, task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        assert user != null;
+                        updateUI(activity,user);
+                        Toast.makeText(activity, "Login Success", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(activity, "Login emailpswd error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static void updateUI(Activity activity, FirebaseUser user) {
         if (user != null) {
             Intent intent = new Intent(activity, HomeActivity.class);
             activity.startActivity(intent);
+
         } else {
             Toast.makeText(activity, "Please Sign in to continue", Toast.LENGTH_SHORT).show();
         }

@@ -2,8 +2,118 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayoutRegister"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmailRegisterActivity">
+    tools:context=".EmailRegisterActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <TextView
+        android:id="@+id/textEmailViewRG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="E-mail"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmailAddressRG"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginHorizontal="30dp"/>
+
+    <TextView
+        android:id="@+id/textPasswordViewRG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/editTextPasswordRG"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextEmailAddressRG"
+        android:layout_marginHorizontal="30dp"/>
+
+    <EditText
+        android:id="@+id/editTextPasswordRG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/textRePasswordViewRG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textPasswordViewRG"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="20dp"
+        android:drawableEnd="@drawable/baseline_visibility_off_24"
+        />
+
+    <EditText
+        android:id="@+id/editTextEmailAddressRG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/textPasswordViewRG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textEmailViewRG"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="20dp"
+        android:focusedByDefault="true"
+        android:drawableEnd="@drawable/baseline_clear_24"
+        tools:ignore="TextFields" />
+
+    <TextView
+        android:id="@+id/linkTextViewRG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have account? Let's go!"
+        app:layout_constraintBottom_toTopOf="@+id/buttonRG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRePasswordRG"
+        android:layout_marginBottom="20dp"
+        />
+
+    <Button
+        android:id="@+id/buttonRG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        app:layout_constraintBottom_toTopOf="@+id/gl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linkTextViewRG"
+        android:layout_marginHorizontal="30dp"
+        />
+
+    <EditText
+        android:id="@+id/editTextRePasswordRG"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="20dp"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textRePasswordViewRG"
+        app:layout_constraintBottom_toTopOf="@+id/linkTextViewRG"
+        android:drawableEnd="@drawable/baseline_visibility_off_24"/>
+
+    <TextView
+        android:id="@+id/textRePasswordViewRG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RePassword"
+        android:layout_marginHorizontal="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordRG"
+        app:layout_constraintBottom_toTopOf="@id/editTextRePasswordRG"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

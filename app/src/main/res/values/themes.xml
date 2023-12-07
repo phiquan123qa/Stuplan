@@ -5,6 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
     <style name="Theme.AppDesign" parent="Base.Theme.AppDesign" />
+
     <style name="Base.Theme.AppDesign.Background">
         <item name="android:windowBackground">@drawable/login_background_gradiant</item>
     </style>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="30dp"
+    android:background="@drawable/bg_white_corner"
+    android:orientation="vertical"
+    android:layout_marginVertical="10dp"
+    android:paddingHorizontal="15dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Create New Issue"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Name title"
+        android:layout_marginVertical="10dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Icon And Color" />
+
+    <!-- Display Selected Icon -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/group_selector_color_icon"
+        android:layout_marginVertical="10dp">
+        <RelativeLayout
+            android:id="@+id/group_selector_icon"
+            android:layout_width="144.5dp"
+            android:layout_height="68dp"
+            android:background="@drawable/selector_icon_color_background"
+            android:elevation="68dp"
+            android:layout_alignParentStart="true">
+
+            <RelativeLayout
+                android:id="@+id/selector_holder_icon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/selector_icon_color_img"
+                android:clipToOutline="true">
+
+                <TextView
+                    android:id="@+id/selector_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="-4sp"
+                    android:text="@string/selector_icon"
+                    android:textAppearance="@style/selector_icon" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doing"
+                    android:textColor="#040415"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Icon"
+                    android:textColor="#9B9BA1"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/group_selector_color"
+            android:layout_width="144.5dp"
+            android:layout_height="68dp"
+            android:background="@drawable/selector_icon_color_background"
+            android:elevation="68dp"
+            android:layout_alignParentEnd="true">
+
+            <RelativeLayout
+                android:id="@+id/selector_holder_color"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/selector_icon_color_img"
+                android:clipToOutline="true"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blue"
+                    android:textColor="#040415"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Color"
+                    android:textColor="#9B9BA1"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Project" />
+
+    <RelativeLayout
+        android:id="@+id/bad_habit"
+        android:layout_width="305dp"
+        android:layout_height="64dp"
+        android:background="@drawable/selector_project_background"
+        android:elevation="68dp"
+        android:layout_marginVertical="10dp">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="273dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/selector_project_background_holder">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daily work"
+                android:drawableStart="@drawable/paper_svg"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description" />
+
+    <EditText
+        android:id="@+id/editTextDescriptionIssue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Text something you want to plan to do in the future of just now"
+        android:textSize="15sp"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/btnCreateNewIssue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:backgroundTint="@color/blue"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"/>
+
+
+</LinearLayout>

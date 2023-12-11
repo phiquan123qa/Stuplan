@@ -12,7 +12,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.vn.utility.AuthenHandle;
+import com.vn.controllers.AuthenHandleImpl;
+import com.vn.controllers.impl.AuthenHandle;
 import com.vn.utility.UtilityKeyboard;
 
 public class EmailRegisterActivity extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class EmailRegisterActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etRePassword;
     private Button btnSubmit;
+    private AuthenHandle authenHandle = new AuthenHandleImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class EmailRegisterActivity extends AppCompatActivity {
                 Toast.makeText(EmailRegisterActivity.this, "Please Check Password and RePassword", Toast.LENGTH_SHORT).show();
                 return;
             }
-            AuthenHandle.handleCreateUserByEmailPassword(EmailRegisterActivity.this, email, password);
+            authenHandle.handleCreateUserByEmailPassword(EmailRegisterActivity.this, email, password);
         });
 
 
@@ -77,7 +79,7 @@ public class EmailRegisterActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            AuthenHandle.updateUI(this, currentUser);
+            authenHandle.updateUI(this, currentUser);
         }
     }
 }

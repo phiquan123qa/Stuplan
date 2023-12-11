@@ -1,4 +1,4 @@
-package com.vn.Models;
+package com.vn.models;
 
 public class User {
     String userID;

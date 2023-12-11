@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="30dp"
+    android:background="@drawable/bg_white_corner"
+    android:orientation="vertical"
+    android:layout_marginVertical="10dp"
+    android:paddingHorizontal="15dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Create New Project"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/editTextTitlePrj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Name title"
+        android:layout_marginVertical="10dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Icon" />
+
+    <!-- Display Selected Icon -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/group_selector_color_icon"
+        android:layout_marginVertical="10dp">
+        <RelativeLayout
+            android:id="@+id/group_selector_icon_prj"
+            android:layout_width="144.5dp"
+            android:layout_height="68dp"
+            android:background="@drawable/selector_icon_color_background"
+            android:elevation="68dp"
+            android:layout_alignParentStart="true">
+
+            <RelativeLayout
+                android:id="@+id/selector_holder_icon_prj"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/selector_icon_color_img"
+                android:clipToOutline="true">
+
+                <TextView
+                    android:id="@+id/selector_icon_prj"
+                    android:layout_width="20dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="-4sp"
+                    android:text="@string/selector_icon"
+                    android:textAppearance="@style/selector_icon" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doing"
+                    android:textColor="#040415"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Icon"
+                    android:textColor="#9B9BA1"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/btnCreateNewPrj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:backgroundTint="@color/blue"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"/>
+
+
+</LinearLayout>

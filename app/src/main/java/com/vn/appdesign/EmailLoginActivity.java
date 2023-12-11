@@ -12,7 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.vn.utility.AuthenHandle;
+import com.vn.controllers.AuthenHandleImpl;
+import com.vn.controllers.impl.AuthenHandle;
 import com.vn.utility.UtilityKeyboard;
 
 public class EmailLoginActivity extends AppCompatActivity {
@@ -20,6 +21,7 @@ public class EmailLoginActivity extends AppCompatActivity {
     private EditText editTextEmailAddress;
     private EditText editTextPassword;
     private Button buttonLG;
+    private AuthenHandle authenHandle = new AuthenHandleImpl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                     Toast.makeText(EmailLoginActivity.this, "Please Enter Your Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                AuthenHandle.handleLoginByEmailPassword(EmailLoginActivity.this, email, password);
+                authenHandle.handleLoginByEmailPassword(EmailLoginActivity.this, email, password);
             }
         });
 

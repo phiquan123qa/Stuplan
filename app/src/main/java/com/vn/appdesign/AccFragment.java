@@ -1,5 +1,6 @@
 package com.vn.appdesign;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +31,9 @@ public class AccFragment extends Fragment {
     public AccFragment() {
         // Required empty public constructor
     }
+
+    Button buttonSignOut;
+    FirebaseAuth mAuth;
 
     /**
      * Use this factory method to create a new instance of
@@ -59,6 +66,17 @@ public class AccFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_acc, container, false);
+        View view = inflater.inflate(R.layout.fragment_acc, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        buttonSignOut = view.findViewById(R.id.signoutt_btn);
+        buttonSignOut.setOnClickListener(v -> {
+            mAuth.signOut();
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            getActivity().finish();
+        });
+        return view;
     }
 }

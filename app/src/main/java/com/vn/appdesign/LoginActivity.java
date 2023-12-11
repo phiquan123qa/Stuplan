@@ -21,7 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.vn.utility.AuthenHandle;
+import com.vn.controllers.AuthenHandleImpl;
+import com.vn.controllers.impl.AuthenHandle;
 
 import java.util.Arrays;
 
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference database;
     CallbackManager callbackManager;
+    AuthenHandle authenHandle = new AuthenHandleImpl();
     int RC_SIGN_IN = 20;
 
     @Override
@@ -53,14 +55,14 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         });
-        buttonGoogle.setOnClickListener(view -> AuthenHandle.googleSignIn(LoginActivity.this));
+        buttonGoogle.setOnClickListener(view -> authenHandle.googleSignIn(LoginActivity.this));
         //Set onclick to login Facebook
         buttonFace.setOnClickListener(view -> {
             LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-                    AuthenHandle.handleFacebookAccessToken(LoginActivity.this, loginResult.getAccessToken());
+                    authenHandle.handleFacebookAccessToken(LoginActivity.this, loginResult.getAccessToken());
                 }
 
                 @Override
@@ -81,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            AuthenHandle.updateUI(this, currentUser);
+            authenHandle.updateUI(this, currentUser);
         }
     }
 
@@ -93,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                AuthenHandle.handleGoogleAccessToken(this, account.getIdToken());
+                authenHandle.handleGoogleAccessToken(this, account.getIdToken());
             } catch (Exception e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             }

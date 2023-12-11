@@ -11,10 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Account" />
+
     <Button
         android:id="@+id/signoutt_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign out"
-        android:layout_gravity="bottom|center" />
+        android:layout_gravity="top|center"
+        android:text="Sign out" />
 </FrameLayout>

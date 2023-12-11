@@ -1,5 +1,6 @@
 package com.vn.appdesign;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.vn.controllers.ManagerIssueImpl;
+import com.vn.controllers.ManagerProjectImpl;
+import com.vn.controllers.impl.ManagerIssue;
+import com.vn.controllers.impl.ManagerProject;
+import com.vn.models.Issue;
+import com.vn.models.IssueStatusEnum;
+import com.vn.models.Project;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +33,8 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    ManagerProject managerProject = new ManagerProjectImpl();
+    ManagerIssue managerIssue = new ManagerIssueImpl();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -59,6 +75,17 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        ArrayList<String> arrayList = new ArrayList<>();
+//        arrayList.add("1lWeSrLqZgYfXXrjKakAHMpyWBA2");
+//        arrayList.add("8VhMRrW2qjUqBJcK0RQS9rzf1s73");
+//        Project project = new Project("-NlOqLsvxQKrTSPCMvXq", "Hellooooooooo", "gzz", new ArrayList<>(), user.getUid(),arrayList);
+        Issue issue = new Issue(null, "-NlOqUZ27gxZ3vsgDohq", "helluu", "sdfsdfs", "dasd", "sdf", IssueStatusEnum.TODO, new Date(), "\n" +
+                "1lWeSrLqZgYfXXrjKakAHMpyWBA2");
+        managerIssue.addIssue(issue);
+//        managerProject.deleteProject(project);
+        return view;
     }
 }

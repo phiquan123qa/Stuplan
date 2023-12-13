@@ -82,9 +82,9 @@ public class HomeFragment extends Fragment {
 //        arrayList.add("1lWeSrLqZgYfXXrjKakAHMpyWBA2");
 //        arrayList.add("8VhMRrW2qjUqBJcK0RQS9rzf1s73");
 //        Project project = new Project("-NlOqLsvxQKrTSPCMvXq", "Hellooooooooo", "gzz", new ArrayList<>(), user.getUid(),arrayList);
-        Issue issue = new Issue(null, "-NlOqUZ27gxZ3vsgDohq", "helluu", "sdfsdfs", "dasd", "sdf", IssueStatusEnum.TODO, new Date(), "\n" +
-                "1lWeSrLqZgYfXXrjKakAHMpyWBA2");
-        managerIssue.addIssue(issue);
+//        Issue issue = new Issue(null, "-NlOqUZ27gxZ3vsgDohq", "helluu", "sdfsdfs", "dasd", "sdf", IssueStatusEnum.TODO, new Date(), "\n" +
+//                "1lWeSrLqZgYfXXrjKakAHMpyWBA2");
+//        managerIssue.addIssue(issue);
 //        managerProject.deleteProject(project);
         return view;
     }

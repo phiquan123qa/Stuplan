@@ -2,11 +2,25 @@ package com.vn.appdesign;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.vn.models.Project;
+import com.vn.utility.AdapterProjectsList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,28 +29,20 @@ import android.view.ViewGroup;
  */
 public class ProjectFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    RecyclerView recyclerView;
+    DatabaseReference reference;
+    AdapterProjectsList adapterProjectsList;
+    List<Project> listProjects;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public ProjectFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProjectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ProjectFragment newInstance(String param1, String param2) {
         ProjectFragment fragment = new ProjectFragment();
         Bundle args = new Bundle();
@@ -59,6 +65,32 @@ public class ProjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_project, container, false);
+        View view = inflater.inflate(R.layout.fragment_project, container, false);
+        recyclerView = view.findViewById(R.id.recycler_view_list_project);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listProjects = new ArrayList<>();
+        adapterProjectsList = new AdapterProjectsList(getContext(), listProjects);
+        recyclerView.setAdapter(adapterProjectsList);
+        reference = FirebaseDatabase.getInstance().getReference("PROJECT");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Project> newList = new ArrayList<>();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Project project = dataSnapshot.getValue(Project.class);
+                    newList.add(project);
+                }
+                listProjects.clear();
+                listProjects.addAll(newList);
+                adapterProjectsList.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return view;
     }
 }

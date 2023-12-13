@@ -69,12 +69,12 @@
 
                 <TextView
                     android:id="@+id/selector_icon"
-                    android:layout_width="20dp"
+                    android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/kotlin_16_svgrepo_com"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="-4sp"
-                    android:text="@string/selector_icon"
                     android:textAppearance="@style/selector_icon" />
             </RelativeLayout>
 
@@ -117,7 +117,7 @@
                 android:layout_marginStart="15dp"
                 android:background="@drawable/selector_icon_color_img"
                 android:clipToOutline="true"
-                app:backgroundTint="@color/gray"/>
+                app:backgroundTint="@color/blue"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,6 +127,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/text_color_show_issue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gray"

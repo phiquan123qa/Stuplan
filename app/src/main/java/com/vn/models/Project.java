@@ -11,6 +11,20 @@ public class Project {
     private ArrayList<String> listUser = new ArrayList<>();
     public Project() {
     }
+
+    public Project(String title, String icon, String ownerID) {
+        this.title = title;
+        this.icon = icon;
+        this.ownerID = ownerID;
+    }
+
+    public Project(String id, String title, String icon, String ownerID) {
+        this.id = id;
+        this.title = title;
+        this.icon = icon;
+        this.ownerID = ownerID;
+    }
+
     public Project(String id, String title, String icon, ArrayList<String> issueId, String ownerID, ArrayList<String> listUser) {
         this.id = id;
         this.title = title;
@@ -66,5 +80,10 @@ public class Project {
 
     public void setListUser(ArrayList<String> listUser) {
         this.listUser = listUser;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }

@@ -203,15 +203,14 @@
         android:inputType="textMultiLine" />
 
 
-
     <Button
         android:id="@+id/btnCreateNewIssue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create"
-        android:backgroundTint="@color/blue"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"
-        android:layout_marginTop="10dp"/>
+        android:backgroundTint="@color/blue"
+        android:text="Create" />
 
 
 </LinearLayout>

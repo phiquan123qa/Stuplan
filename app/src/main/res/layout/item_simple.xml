@@ -20,7 +20,7 @@
                 android:id="@+id/icon_prj_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/baseline_work_24"
+                app:srcCompat="@drawable/kotlin_16_svgrepo_com"
                 android:layout_gravity="center_vertical"/>
             <TextView
                 android:id="@+id/title_prj_item"

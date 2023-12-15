@@ -2,6 +2,7 @@ package com.vn.appdesign;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,8 +11,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,19 +38,30 @@ import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vn.appdesign.databinding.ActivityHomeBinding;
+import com.vn.controllers.ManagerIssueImpl;
+import com.vn.controllers.ManagerProjectImpl;
+import com.vn.controllers.impl.ManagerIssue;
+import com.vn.controllers.impl.ManagerProject;
+import com.vn.models.Issue;
+import com.vn.models.IssueStatusEnum;
 import com.vn.models.Project;
 import com.vn.utility.colorPicker.ColorPickerDialog;
 import com.vn.utility.icon.IconAdapter;
 
+import java.lang.reflect.Field;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
     List<Integer> icons = Arrays.asList(
@@ -94,10 +111,13 @@ public class HomeActivity extends AppCompatActivity {
             R.drawable.vue_16_svgrepo_com,
             R.drawable.yarn_16_svgrepo_com
     );
+    FirebaseAuth mAuth;
     ActivityHomeBinding binding;
     FloatingActionButton mainFAB;
     ExtendedFloatingActionButton issueFAB, prfFAB;
     DatabaseReference reference;
+    ManagerIssue managerIssue = new ManagerIssueImpl();
+    ManagerProject managerProject = new ManagerProjectImpl();
     Boolean isVisible = false;
     private int currentColor = Color.GRAY;
 
@@ -164,22 +184,26 @@ public class HomeActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.add_issue_dialog);
+        EditText textTitle = dialog.findViewById(R.id.editTextTitle);
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.auto_cpl_txt);
         RelativeLayout rlBtnIcon = dialog.findViewById(R.id.selector_holder_icon);
         TextView iconButtonChoose = dialog.findViewById(R.id.selector_icon);
+        EditText textDes = dialog.findViewById(R.id.editTextDescriptionIssue);
         TextView textColor = dialog.findViewById(R.id.text_color_show_issue);
         TextInputLayout textInputLayout = dialog.findViewById(R.id.header_round_selector);
+        Button sybSubmitIssue = dialog.findViewById(R.id.btnCreateNewIssue);
         reference = FirebaseDatabase.getInstance().getReference("PROJECT");
-        List<String> itemsList = new ArrayList<>();
-        ArrayAdapter<String> adapterItems = new ArrayAdapter<String>(this, R.layout.list_item_project, itemsList);
+        List<Project> itemsList = new ArrayList<>();
+
+        ArrayAdapter<Project> adapterItems = new ArrayAdapter<Project>(this, R.layout.list_item_project, itemsList);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> newItems = new ArrayList<>();
+                List<Project> newItems = new ArrayList<>();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()){
                     Project project = dataSnapshot.getValue(Project.class);
                     assert project != null;
-                    newItems.add(project.getTitle());
+                    newItems.add(project);
                 }
                 itemsList.clear();
                 itemsList.addAll(newItems);
@@ -191,11 +215,14 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         autoCompleteTextView.setAdapter(adapterItems);
+        final Project[] selectedProject = new Project[1];
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(HomeActivity.this, "Item: " + item, Toast.LENGTH_SHORT).show();
+                selectedProject[0] = (Project) parent.getItemAtPosition(position);
+                String projectId = selectedProject[0].getId();
+                String projectTitle = selectedProject[0].getTitle();
+                Toast.makeText(HomeActivity.this, "ID:"+projectId+"Item: " + projectTitle, Toast.LENGTH_SHORT).show();
                 textInputLayout.clearFocus();
                 autoCompleteTextView.clearFocus();
                 textInputLayout.setHintEnabled(false);
@@ -260,6 +287,30 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        sybSubmitIssue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String titleIssue = textTitle.getText().toString();
+                String iconIssue = iconButtonChoose.getBackground().toString();
+                String colorIssue = btnColor.getBackgroundTintList().toString();
+                String projectIssue = (selectedProject[0] != null && selectedProject[0].getId() != null)
+                        ? selectedProject[0].getId()
+                        : null;
+                String descriptionIssue = textDes.getText().toString();
+                String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                if (titleIssue.isEmpty() || projectIssue == null || descriptionIssue.isEmpty() || Uid.isEmpty()) {
+                    Toast.makeText(HomeActivity.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    Issue issue = new Issue(null, projectIssue, titleIssue, descriptionIssue, colorIssue, iconIssue, IssueStatusEnum.TODO, new Date(), Uid);
+                    managerIssue.addIssue(issue);
+                    dialog.dismiss();
+                    Toast.makeText(HomeActivity.this, "Create Issue Successfully", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
         Window window = dialog.getWindow();
         if(window == null){
             return;
@@ -275,12 +326,78 @@ public class HomeActivity extends AppCompatActivity {
         mainFAB.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
         dialog.show();
 
+
     }
     private void showInputAddProjectDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.add_project_dialog);
 
+        RelativeLayout rlBtnIcon = dialog.findViewById(R.id.selector_holder_icon_prj);
+        TextView iconButtonChoose = dialog.findViewById(R.id.selector_icon_prj);
+        EditText projectTitle = dialog.findViewById(R.id.editTextTitlePrj);
+        Button sybSubmitProject = dialog.findViewById(R.id.btnCreateNewPrj);
+
+        rlBtnIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View dialogView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.add_icon_dialog, null);
+                dialogView.setMinimumWidth(300);
+                dialogView.setMinimumHeight(300);
+                ListView iconListView = dialogView.findViewById(R.id.icon_list);
+                IconAdapter iconAdapter = new IconAdapter(HomeActivity.this, icons);
+                iconListView.setAdapter(iconAdapter);
+                iconListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        iconAdapter.setSelectedItemPosition(position);
+                    }
+                });
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle("Choose an Icon")
+                        .setView(dialogView)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int selectedIcon = iconAdapter.getSelectedItemPosition();
+                                // Handle selected icon
+                                if (selectedIcon != -1) {
+                                    int iconSLT = icons.get(selectedIcon);
+                                    iconButtonChoose.setBackgroundResource(iconSLT);
+                                    // Handle selected icon
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+        });
+        sybSubmitProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String titleIssue = projectTitle.getText().toString();
+                String iconIssue = iconButtonChoose.getBackground().toString();
+                Drawable backgroundDrawable = iconButtonChoose.getBackground();
+                String resourceName = getResourceNameFromDrawable(backgroundDrawable);
+                String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                if (titleIssue.isEmpty()||titleIssue==null) {
+                    Toast.makeText(HomeActivity.this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    Project project = new Project(null, titleIssue, resourceName, Uid);
+                    managerProject.addProject(project);
+                    dialog.dismiss();
+                    Toast.makeText(HomeActivity.this, "Create Project Successfully", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
         Window window = dialog.getWindow();
         if(window == null){
@@ -296,4 +413,28 @@ public class HomeActivity extends AppCompatActivity {
 
         dialog.show();
     }
+    private String getResourceNameFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
+        try {
+            Resources resources = getResources();
+
+            if (drawable instanceof BitmapDrawable) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                int resourceId = resources.getIdentifier(
+                        resources.getResourceEntryName(bitmapDrawable.getBitmap().getGenerationId()),
+                        "drawable",
+                        getPackageName()
+                );
+                return resources.getResourceEntryName(resourceId);
+            } else {
+                return resources.getResourceEntryName(R.drawable.kotlin_16_svgrepo_com);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

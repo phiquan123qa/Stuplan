@@ -35,6 +35,17 @@ public class Issue {
         this.userID = userID;
     }
 
+    public Issue(String idProject, String title, String description, String color, String icon, IssueStatusEnum status, Date dateCreate, String userID) {
+        this.idProject = idProject;
+        this.title = title;
+        this.description = description;
+        this.color = color;
+        this.icon = icon;
+        this.status = status;
+        this.dateCreate = dateCreate;
+        this.userID = userID;
+    }
+
     public String getId() {
         return id;
     }

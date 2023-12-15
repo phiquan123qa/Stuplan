@@ -70,9 +70,9 @@
                     android:layout_width="20dp"
                     android:layout_height="24dp"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/kotlin_16_svgrepo_com"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="-4sp"
-                    android:text="@string/selector_icon"
                     android:textAppearance="@style/selector_icon" />
             </RelativeLayout>
 

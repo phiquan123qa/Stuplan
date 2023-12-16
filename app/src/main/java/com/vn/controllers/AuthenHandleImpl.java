@@ -70,11 +70,11 @@ public class AuthenHandleImpl implements AuthenHandle {
                                     if (writeTask.isSuccessful()) {
                                         updateUI(activity,user);
                                     } else {
-                                        Toast.makeText(activity, "Failed to write data to the database: " + writeTask.getException(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(activity, "Failed to write data to the database: " + writeTask.getException(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                     } else {
-                        Toast.makeText(activity, "Login google error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Login google error", Toast.LENGTH_LONG).show();
                     }
                 });
     }

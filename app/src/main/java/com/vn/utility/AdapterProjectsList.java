@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vn.appdesign.HomeActivity;
 import com.vn.appdesign.R;
 import com.vn.models.Project;
 
@@ -19,10 +21,15 @@ import java.util.List;
 public class AdapterProjectsList extends RecyclerView.Adapter<AdapterProjectsList.AdapterProjectsListHolder> {
     Context context;
     List<Project> listProjects;
+    OnItemClickListener listener;
+    public interface OnItemClickListener {
+        void onItemClick(String projectId);
+    }
 
-    public AdapterProjectsList(Context context, List<Project> listProjects) {
+    public AdapterProjectsList(Context context, List<Project> listProjects, OnItemClickListener listener) {
         this.context = context;
         this.listProjects = listProjects;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,6 +43,7 @@ public class AdapterProjectsList extends RecyclerView.Adapter<AdapterProjectsLis
     public void onBindViewHolder(@NonNull AdapterProjectsListHolder holder, int position) {
         Project project = listProjects.get(position);
         holder.titleProject.setText(project.getTitle());
+        holder.bind(project, listener);
         int iconResourceId = getIconResourceId(context, project.getIcon());
         if (iconResourceId != 0) {
             holder.iconProject.setImageResource(iconResourceId);
@@ -62,6 +70,18 @@ public class AdapterProjectsList extends RecyclerView.Adapter<AdapterProjectsLis
             super(itemView);
             iconProject=itemView.findViewById(R.id.icon_prj_item);
             titleProject=itemView.findViewById(R.id.title_prj_item);
+        }
+        public void bind(final Project project, final OnItemClickListener listener) {
+            // Bind data to views
+            titleProject.setText(project.getTitle());
+
+            // Set click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(project.getId());
+                }
+            });
         }
     }
 }

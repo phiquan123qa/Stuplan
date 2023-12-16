@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ProjectFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/headerNavIssue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_header_nav"
+            app:backgroundTint = "@null">
+
+            <Button
+                android:id="@+id/btn_back_to_project"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                android:background="@drawable/bg_icon_notification"
+                android:contentDescription="Notification"
+                android:drawableTop="@drawable/baseline_arrow_back_ios_new_24"
+                app:backgroundTint="@null" />
+            <TextView
+                android:id="@+id/title_issue_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_back_to_project"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/btn_back_to_project"
+                android:text="Issue"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/btn_open_notification"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_notification"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="40dp"
+                app:backgroundTint = "@null"
+                android:drawableTop="@drawable/baseline_notifications_24"
+                android:contentDescription = "Notification"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/view_search_issue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headerNavIssue"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="20dp">
+            <EditText
+                android:id="@+id/input_search_issue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Search your issue                   "
+                android:textSize="15sp"
+                android:layout_centerVertical="true"/>
+            <Button
+                android:id="@+id/btn_sort_issue"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_icon_notification"
+                android:contentDescription="Search Project"
+                android:drawableTop="@drawable/baseline_sort_24"
+                android:layout_toStartOf="@+id/input_search_issue"
+                app:backgroundTint="@null" />
+            <Button
+                android:id="@+id/btn_search_issue"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/btn_sort_issue"
+                android:background="@drawable/bg_icon_notification"
+                android:contentDescription="Search Issue"
+                android:drawableTop="@drawable/baseline_search_24"
+                app:backgroundTint="@null" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_link_add_new_issue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/view_search_issue"
+            android:visibility="gone">
+        <TextView
+            android:id="@+id/text_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="Your project don't have any issue yet"/>
+        <TextView
+            android:id="@+id/link_add_new_issue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text_notification"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Add New Issue"
+            android:textSize="18sp"
+            android:textColor="@color/blue"/>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_list_issue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/view_search_issue"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="80dp" />
+    </RelativeLayout>
+
+
+
+</FrameLayout>

@@ -97,7 +97,8 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 authenHandle.handleGoogleAccessToken(this, account.getIdToken());
             } catch (Exception e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                Toast.makeText(this, "ERROR: "+e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }

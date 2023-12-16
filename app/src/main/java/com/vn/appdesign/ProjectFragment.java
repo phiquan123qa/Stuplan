@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,7 +72,12 @@ public class ProjectFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listProjects = new ArrayList<>();
-        adapterProjectsList = new AdapterProjectsList(getContext(), listProjects);
+        adapterProjectsList = new AdapterProjectsList(getContext(), listProjects, new AdapterProjectsList.OnItemClickListener() {
+            @Override
+            public void onItemClick(String projectId) {
+                navigateToAnotherFragment(projectId);
+            }
+        });
         recyclerView.setAdapter(adapterProjectsList);
         reference = FirebaseDatabase.getInstance().getReference("PROJECT");
         reference.addValueEventListener(new ValueEventListener() {
@@ -92,5 +99,19 @@ public class ProjectFragment extends Fragment {
             }
         });
         return view;
+    }
+    private void navigateToAnotherFragment(String projectId) {
+        // Implement navigation logic here, for example, using FragmentManager
+        // and replace the current fragment with a new one while passing the projectId
+        IssueFragment fragment = new IssueFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("projectId", projectId);
+        fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
-            android:id="@+id/headerNavIssue"
+            android:id="@+id/header_nav_issue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_header_nav"
@@ -22,7 +22,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="40dp"
                 android:background="@drawable/bg_icon_notification"
-                android:contentDescription="Notification"
+                android:contentDescription="Back"
                 android:drawableTop="@drawable/baseline_arrow_back_ios_new_24"
                 app:backgroundTint="@null" />
             <TextView
@@ -33,8 +33,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/btn_back_to_project"
-                android:text="Issue"
-                android:textSize="25sp"
+                android:text="Project"
+                android:textSize="22sp"
                 android:textStyle="bold" />
             <Button
                 android:id="@+id/btn_open_notification"
@@ -48,11 +48,17 @@
                 android:drawableTop="@drawable/baseline_notifications_24"
                 android:contentDescription = "Notification"/>
         </RelativeLayout>
+
+        <include layout = "@layout/contain_main"
+            android:id="@+id/selector_tab_layout"
+            android:layout_below="@+id/header_nav_issue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <RelativeLayout
             android:id="@+id/view_search_issue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/headerNavIssue"
+            android:layout_below="@+id/selector_tab_layout"
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="20dp">
             <EditText

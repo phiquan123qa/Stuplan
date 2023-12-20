@@ -2,17 +2,23 @@ package com.vn.utility;
 
 import android.content.Context;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.vn.appdesign.HomeActivity;
 import com.vn.appdesign.R;
 import com.vn.models.Issue;
+import com.vn.models.Project;
 
 import org.w3c.dom.Text;
 
@@ -26,10 +32,15 @@ import java.util.logging.SimpleFormatter;
 public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.AdapterIssuesListHolder> {
     Context context;
     List<Issue> listIssues;
+    AdapterIssuesList.OnItemClickListener listener;
+    public interface OnItemClickListener {
+        void onItemClick(String projectId);
+    }
 
-    public AdapterIssuesList(Context context, List<Issue> listIssues) {
+    public AdapterIssuesList(Context context, List<Issue> listIssues, AdapterIssuesList.OnItemClickListener listener) {
         this.context = context;
         this.listIssues = listIssues;
+        this.listener = listener;
     }
 
     @NonNull
@@ -43,33 +54,22 @@ public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.Ad
     public void onBindViewHolder(@NonNull AdapterIssuesListHolder holder, int position) {
         Issue issue = listIssues.get(position);
         holder.titleIssue.setText(issue.getTitle());
+        holder.bind(issue, listener);
         int iconResourceId = getIconResourceId(context, issue.getIcon());
         if (iconResourceId != 0) {
             holder.iconIssue.setImageResource(iconResourceId);
         }
         Date createDate = issue.getDateCreate();
-
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
-//        String formattedDate = dateFormat.format(createDate);
-//
-//        holder.createTimeIssue.setText(formattedDate);
         long timeDifference = System.currentTimeMillis() - createDate.getTime();
-
-        // Convert milliseconds to days
         long daysDifference = TimeUnit.MILLISECONDS.toDays(timeDifference);
-
         String formattedDate;
         if (daysDifference == 0) {
-            // Less than 1 day, show time elapsed in hours and minutes
             formattedDate = DateUtils.getRelativeTimeSpanString(createDate.getTime(), System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS).toString();
         } else if (daysDifference == 1) {
-            // 1 day ago
             formattedDate = "Yesterday " + new SimpleDateFormat("HH:mm", Locale.getDefault()).format(createDate);
         } else if (daysDifference <= 7) {
-            // 2 to 7 days ago
             formattedDate = daysDifference + " days ago " + new SimpleDateFormat("HH:mm", Locale.getDefault()).format(createDate);
         } else {
-            // More than 7 days ago, show the full date and time
             formattedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(createDate);
         }
         holder.createTimeIssue.setText(formattedDate);
@@ -97,6 +97,16 @@ public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.Ad
             iconIssue=itemView.findViewById(R.id.icon_issue_item);
             createTimeIssue = itemView.findViewById(R.id.time_issue_item);
             titleIssue=itemView.findViewById(R.id.title_issue_item);
+        }
+        public void bind(final Issue issue, final AdapterIssuesList.OnItemClickListener listener) {
+            titleIssue.setText(issue.getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(issue.getId());
+                    Log.i("ID ISSUE",issue.getId());
+                }
+            });
         }
     }
 }

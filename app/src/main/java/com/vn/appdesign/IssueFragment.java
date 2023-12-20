@@ -1,5 +1,7 @@
 package com.vn.appdesign;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,7 +60,9 @@ public class IssueFragment extends Fragment {
     List<Issue> listIssues;
     ColorStateList def;
     TextView item1, item2, item3, select;
-    Integer selectedTab = 0;
+    Integer selectedTab;
+    private String finalProjectId;
+    private View view;
 
     public IssueFragment() {
         // Required empty public constructor
@@ -79,21 +84,27 @@ public class IssueFragment extends Fragment {
         Bundle arguments = getArguments();
         if (arguments != null) {
             String projectId = arguments.getString("projectId");
-            if (projectId != null) {
-                //projectID = arguments.getString(PRJ_ID);
-            }
         }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if (selectedTab==null){
+            selectedTab = 0;
+        }
+        if (savedInstanceState != null) {
+            selectedTab = savedInstanceState.getInt("selectedTab", 0);
+        }else {
+            selectedTab = retrieveStateFromSharedPreferences();
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_issue, container, false);
+        view = inflater.inflate(R.layout.fragment_issue, container, false);
         Button buttonBack = view.findViewById(R.id.btn_back_to_project) ;
         TextView titleTextView = view.findViewById(R.id.title_issue_fragment);
         item1 = view.findViewById(R.id.item_select1);
@@ -110,7 +121,7 @@ public class IssueFragment extends Fragment {
                 fetchProjectName(projectId, titleTextView);
             }
         }
-        String finalProjectId = projectId;
+        finalProjectId = projectId;
         item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,54 +166,15 @@ public class IssueFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listIssues = new ArrayList<>();
-        adapterIssuesList = new AdapterIssuesList(getContext(), listIssues);
+        adapterIssuesList = new AdapterIssuesList(getContext(), listIssues, new AdapterIssuesList.OnItemClickListener() {
+            @Override
+            public void onItemClick(String issueId) {
+                navigateToAnotherFragment(issueId);
+            }
+        });
         recyclerView.setAdapter(adapterIssuesList);
         reference = FirebaseDatabase.getInstance().getReference("ISSUE");
         updateListBasedOnSelectedTab(selectedTab, listIssues, reference, finalProjectId, view);
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                List<Issue> newList = new ArrayList<>();
-//                String projectIdd = finalProjectId;
-//                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-//                    Issue issue = dataSnapshot.getValue(Issue.class);
-//                    if (issue != null && projectIdd.equals(issue.getIdProject())) {
-//                        switch (selectedTab) {
-//                            case 0: // TODO tab
-//                                if (IssueStatusEnum.TODO.equals(issue.getStatus())) {
-//                                    newList.add(issue);
-//                                }
-//                                break;
-//                            case 1: // DOING tab
-//                                if (IssueStatusEnum.DOING.equals(issue.getStatus())) {
-//                                    newList.add(issue);
-//                                }
-//                                break;
-//                            case 2: // DONE tab
-//                                if (IssueStatusEnum.DONE.equals(issue.getStatus())) {
-//                                    newList.add(issue);
-//                                }
-//                                break;
-//                        }
-//                    }
-//                }
-//                listIssues.clear();
-//                listIssues.addAll(newList);
-//                adapterIssuesList.notifyDataSetChanged();
-//                if (listIssues.isEmpty()) {
-//                    // If empty, show a TextView or handle it in your UI
-//                    showEmptyIssuesNotification(view, 1);
-//                } else {
-//                    // If not empty, hide the notification
-//                    showEmptyIssuesNotification(view, 0);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,10 +198,7 @@ public class IssueFragment extends Fragment {
 
     }
     private void navigateBackToProjectFragment() {
-        // Get the FragmentManager
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
-        // Pop the back stack to go back to the ProjectFragment
         fragmentManager.popBackStack();
     }
     private void fetchProjectName(String projectId, TextView titleTextView) {
@@ -255,8 +224,6 @@ public class IssueFragment extends Fragment {
         });
     }
     private void updateListBasedOnSelectedTab(int selectedTab, List<Issue> listIssues, DatabaseReference reference,String finalProjectId, View view) {
-        // You can implement additional logic here if needed
-        // For example, update the UI or perform other actions based on the selected tab
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -301,7 +268,37 @@ public class IssueFragment extends Fragment {
 
             }
         });
+    }
+    private void navigateToAnotherFragment(String issueId) {
+        IssueDetailFragment fragment = new IssueDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("issueId", issueId);
+        fragment.setArguments(bundle);
 
-
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("selectedTab", selectedTab);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveStateToSharedPreferences(selectedTab);
+    }
+    private void saveStateToSharedPreferences(int selectedTab) {
+        SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("selectedTab", selectedTab);
+        editor.apply();
+    }
+    private int retrieveStateFromSharedPreferences() {
+        SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getInt("selectedTab", 0);
     }
 }

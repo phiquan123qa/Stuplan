@@ -61,21 +61,16 @@ public class AdapterProjectsList extends RecyclerView.Adapter<AdapterProjectsLis
     public int getItemCount() {
         return listProjects.size();
     }
-
     public static class AdapterProjectsListHolder extends RecyclerView.ViewHolder{
         TextView titleProject;
         ImageView iconProject;
-
         public AdapterProjectsListHolder(@NonNull View itemView) {
             super(itemView);
             iconProject=itemView.findViewById(R.id.icon_prj_item);
             titleProject=itemView.findViewById(R.id.title_prj_item);
         }
         public void bind(final Project project, final OnItemClickListener listener) {
-            // Bind data to views
             titleProject.setText(project.getTitle());
-
-            // Set click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

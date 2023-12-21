@@ -10,15 +10,16 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.AppDesign"
         tools:targetApi="31">
         <activity
             android:name=".HomeActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustNothing" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -28,35 +29,35 @@
 
         <activity
             android:name=".EmailRegisterActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait"
             android:exported="false"
             android:label="Login By Email"
-            android:theme="@style/AppThemeWithActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustNothing">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EmailLoginActivity" />
         </activity>
         <activity
             android:name=".EmailLoginActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait"
             android:exported="false"
             android:label="Login By Email"
-            android:theme="@style/AppThemeWithActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeWithActionBar"
+            android:windowSoftInputMode="adjustNothing">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoginActivity" />
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppDesign.Background" />
         <activity
             android:name=".StartActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppDesign.Background">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,19 +67,17 @@
         </activity>
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>

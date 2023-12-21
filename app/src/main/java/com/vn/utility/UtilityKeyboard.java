@@ -42,4 +42,5 @@ public class UtilityKeyboard {
         // Move the cursor to the end of the text
         editTextPassword.setSelection(editTextPassword.getText().length());
     }
+
 }

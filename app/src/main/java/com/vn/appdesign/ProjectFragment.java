@@ -1,5 +1,7 @@
 package com.vn.appdesign;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,8 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.SearchView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +41,7 @@ public class ProjectFragment extends Fragment {
     DatabaseReference reference;
     AdapterProjectsList adapterProjectsList;
     List<Project> listProjects;
-
+    SearchView searchView;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -66,8 +72,21 @@ public class ProjectFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_project, container, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.requestFocus();
+            }
+        });
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                closeKeyboardInFragment();
+                return false;
+            }
+        });
+        searchView = view.findViewById(R.id.input_search_prj);
         recyclerView = view.findViewById(R.id.recycler_view_list_project);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -81,10 +100,11 @@ public class ProjectFragment extends Fragment {
         recyclerView.setAdapter(adapterProjectsList);
         reference = FirebaseDatabase.getInstance().getReference("PROJECT");
         reference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Project> newList = new ArrayList<>();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Project project = dataSnapshot.getValue(Project.class);
                     newList.add(project);
                 }
@@ -98,11 +118,37 @@ public class ProjectFragment extends Fragment {
 
             }
         });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterProjects(newText);
+                return true;
+            }
+        });
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    searchView.clearFocus();
+                }
+            }
+        });
+        Button sortByNameButton = view.findViewById(R.id.btn_sort_prj);
+        sortByNameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterProjectsList.sortByName();
+            }
+        });
         return view;
     }
+
     private void navigateToAnotherFragment(String projectId) {
-        // Implement navigation logic here, for example, using FragmentManager
-        // and replace the current fragment with a new one while passing the projectId
         IssueFragment fragment = new IssueFragment();
         Bundle bundle = new Bundle();
         bundle.putString("projectId", projectId);
@@ -114,4 +160,24 @@ public class ProjectFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    private void filterProjects(String query) {
+        // Create a filtered list based on the search query
+        List<Project> filteredList = new ArrayList<>();
+        for (Project project : listProjects) {
+            if (project.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(project);
+            }
+        }
+        adapterProjectsList.setFilter(filteredList);
+    }
+
+    private void closeKeyboardInFragment() {
+        View view = getView();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
 }

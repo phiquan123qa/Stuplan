@@ -37,46 +37,30 @@
                 android:drawableTop="@drawable/baseline_notifications_24"
                 android:contentDescription = "Notification"/>
         </RelativeLayout>
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/view_search_prj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/headerNavPrj"
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="20dp">
-            <EditText
+            <SearchView
                 android:id="@+id/input_search_prj"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Search your project                  "
-                android:textSize="15sp"
-                android:layout_centerVertical="true"/>
+                android:queryHint="Search projects"
+                app:iconifiedByDefault="false"
+                android:layout_weight="1"/>
             <Button
                 android:id="@+id/btn_sort_prj"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/bg_icon_notification"
-                android:contentDescription="Search Project"
-                android:drawableTop="@drawable/baseline_sort_24"
-                android:layout_toStartOf="@+id/input_search_prj"
-                app:backgroundTint="@null" />
-
-            <Button
-                android:id="@+id/btn_search_prj"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
                 android:layout_marginEnd="10dp"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/btn_sort_prj"
                 android:background="@drawable/bg_icon_notification"
-                android:contentDescription="Search Project"
-                android:drawableTop="@drawable/baseline_search_24"
+                android:drawableTop="@drawable/baseline_sort_24"
                 app:backgroundTint="@null" />
 
-
-        </RelativeLayout>
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_list_project"

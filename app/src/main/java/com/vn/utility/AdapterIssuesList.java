@@ -1,5 +1,6 @@
 package com.vn.utility;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -23,6 +24,8 @@ import com.vn.models.Project;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +36,20 @@ public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.Ad
     Context context;
     List<Issue> listIssues;
     AdapterIssuesList.OnItemClickListener listener;
+    @SuppressLint("NotifyDataSetChanged")
+    public void setFilter(List<Issue> filteredList) {
+        this.listIssues = filteredList;
+        notifyDataSetChanged();
+    }
+    public void sortByName() {
+        Collections.sort(listIssues, new Comparator<Issue>() {
+            @Override
+            public int compare(Issue issue1, Issue issue2) {
+                return issue1.getTitle().compareToIgnoreCase(issue2.getTitle());
+            }
+        });
+        notifyDataSetChanged();
+    }
     public interface OnItemClickListener {
         void onItemClick(String issueId);
     }

@@ -15,10 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -37,20 +40,12 @@ import com.vn.utility.AdapterProjectsList;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link IssueFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class IssueFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String PRJ_ID = "projectId";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     String projectID;
@@ -63,9 +58,9 @@ public class IssueFragment extends Fragment {
     Integer selectedTab;
     private String finalProjectId;
     private View view;
+    SearchView searchView;
 
     public IssueFragment() {
-        // Required empty public constructor
     }
 
     public static IssueFragment newInstance(String param1, String param2, String projectID) {
@@ -89,12 +84,12 @@ public class IssueFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        if (selectedTab==null){
+        if (selectedTab == null) {
             selectedTab = 0;
         }
         if (savedInstanceState != null) {
             selectedTab = savedInstanceState.getInt("selectedTab", 0);
-        }else {
+        } else {
             selectedTab = retrieveStateFromSharedPreferences();
         }
 
@@ -103,9 +98,22 @@ public class IssueFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_issue, container, false);
-        Button buttonBack = view.findViewById(R.id.btn_back_to_project) ;
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.requestFocus();
+            }
+        });
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                closeKeyboardInFragment();
+                return false;
+            }
+        });
+        searchView = view.findViewById(R.id.input_search_issue);
+        Button buttonBack = view.findViewById(R.id.btn_back_to_project);
         TextView titleTextView = view.findViewById(R.id.title_issue_fragment);
         item1 = view.findViewById(R.id.item_select1);
         item2 = view.findViewById(R.id.item_select2);
@@ -117,7 +125,6 @@ public class IssueFragment extends Fragment {
         if (arguments != null) {
             projectId = arguments.getString("projectId");
             if (projectId != null) {
-                //projectID = arguments.getString(PRJ_ID);
                 fetchProjectName(projectId, titleTextView);
             }
         }
@@ -151,7 +158,7 @@ public class IssueFragment extends Fragment {
         item3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int size = item3.getWidth()*2;
+                int size = item3.getWidth() * 2;
                 select.animate().x(size).setDuration(100);
                 item1.setTextColor(def);
                 item2.setTextColor(def);
@@ -182,25 +189,44 @@ public class IssueFragment extends Fragment {
                 navigateBackToProjectFragment();
             }
         });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterIssues(newText);
+                return true;
+            }
+        });
+        Button sortByNameButton = view.findViewById(R.id.btn_sort_issue);
+        sortByNameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapterIssuesList.sortByName();
+            }
+        });
         return view;
     }
 
     private void showEmptyIssuesNotification(View view, Integer check) {
-        if(check == 1){
+        if (check == 1) {
             RelativeLayout emptyIssuesNotification = view.findViewById(R.id.container_link_add_new_issue);
             emptyIssuesNotification.setVisibility(View.VISIBLE);
-        }
-        else if(check == 0){
+        } else if (check == 0) {
             RelativeLayout emptyIssuesNotification = view.findViewById(R.id.container_link_add_new_issue);
             emptyIssuesNotification.setVisibility(View.GONE);
         }
 
     }
+
     private void navigateBackToProjectFragment() {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.popBackStack();
     }
+
     private void fetchProjectName(String projectId, TextView titleTextView) {
         DatabaseReference projectReference = FirebaseDatabase.getInstance().getReference("PROJECT").child(projectId);
         projectReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -219,17 +245,17 @@ public class IssueFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error if needed
             }
         });
     }
-    private void updateListBasedOnSelectedTab(int selectedTab, List<Issue> listIssues, DatabaseReference reference,String finalProjectId, View view) {
+
+    private void updateListBasedOnSelectedTab(int selectedTab, List<Issue> listIssues, DatabaseReference reference, String finalProjectId, View view) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Issue> newList = new ArrayList<>();
                 String projectIdd = finalProjectId;
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Issue issue = dataSnapshot.getValue(Issue.class);
                     if (issue != null && projectIdd.equals(issue.getIdProject())) {
                         switch (selectedTab) {
@@ -254,11 +280,9 @@ public class IssueFragment extends Fragment {
                 listIssues.clear();
                 listIssues.addAll(newList);
                 adapterIssuesList.notifyDataSetChanged();
-                if (listIssues.isEmpty()&&selectedTab==0) {
-                    // If empty, show a TextView or handle it in your UI
+                if (listIssues.isEmpty() && selectedTab == 0) {
                     showEmptyIssuesNotification(view, 1);
                 } else {
-                    // If not empty, hide the notification
                     showEmptyIssuesNotification(view, 0);
                 }
             }
@@ -269,6 +293,7 @@ public class IssueFragment extends Fragment {
             }
         });
     }
+
     private void navigateToAnotherFragment(String issueId) {
         IssueDetailFragment fragment = new IssueDetailFragment();
         Bundle bundle = new Bundle();
@@ -281,24 +306,46 @@ public class IssueFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("selectedTab", selectedTab);
     }
+
     @Override
     public void onPause() {
         super.onPause();
         saveStateToSharedPreferences(selectedTab);
     }
+
     private void saveStateToSharedPreferences(int selectedTab) {
         SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("selectedTab", selectedTab);
         editor.apply();
     }
+
     private int retrieveStateFromSharedPreferences() {
         SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
         return sharedPreferences.getInt("selectedTab", 0);
+    }
+
+    private void filterIssues(String query) {
+        // Create a filtered list based on the search query
+        List<Issue> filteredList = new ArrayList<>();
+        for (Issue issue : listIssues) {
+            if (issue.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(issue);
+            }
+        }
+        adapterIssuesList.setFilter(filteredList);
+    }
+    private void closeKeyboardInFragment() {
+        View view = getView();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

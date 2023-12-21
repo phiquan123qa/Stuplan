@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -32,7 +33,7 @@ public class AccFragment extends Fragment {
         // Required empty public constructor
     }
 
-    Button buttonSignOut;
+    LinearLayout buttonSignOut;
     FirebaseAuth mAuth;
 
     /**
@@ -65,7 +66,6 @@ public class AccFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_acc, container, false);
 
         mAuth = FirebaseAuth.getInstance();

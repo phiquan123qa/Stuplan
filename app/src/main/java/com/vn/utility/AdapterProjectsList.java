@@ -1,5 +1,6 @@
 package com.vn.utility;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,28 @@ import com.vn.appdesign.R;
 import com.vn.models.Project;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdapterProjectsList extends RecyclerView.Adapter<AdapterProjectsList.AdapterProjectsListHolder> {
     Context context;
     List<Project> listProjects;
     OnItemClickListener listener;
+    @SuppressLint("NotifyDataSetChanged")
+    public void setFilter(List<Project> filteredList) {
+        this.listProjects = filteredList;
+        notifyDataSetChanged();
+    }
+    public void sortByName() {
+        Collections.sort(listProjects, new Comparator<Project>() {
+            @Override
+            public int compare(Project project1, Project project2) {
+                return project1.getTitle().compareToIgnoreCase(project2.getTitle());
+            }
+        });
+        notifyDataSetChanged();
+    }
     public interface OnItemClickListener {
         void onItemClick(String projectId);
     }

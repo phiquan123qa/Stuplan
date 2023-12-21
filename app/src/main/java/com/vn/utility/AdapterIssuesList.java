@@ -34,7 +34,7 @@ public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.Ad
     List<Issue> listIssues;
     AdapterIssuesList.OnItemClickListener listener;
     public interface OnItemClickListener {
-        void onItemClick(String projectId);
+        void onItemClick(String issueId);
     }
 
     public AdapterIssuesList(Context context, List<Issue> listIssues, AdapterIssuesList.OnItemClickListener listener) {

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/bg_non_selecter_tab_layout">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/selected_tab"
+                android:layout_weight="1"
+                android:text=""
+                android:background="@drawable/bg_selecter_tab_layout"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/item_select1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Daily"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/item_select2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Weekly"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/item_select3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Monthly"
+                android:gravity="center"/>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>

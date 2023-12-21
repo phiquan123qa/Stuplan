@@ -8,41 +8,28 @@
     android:elevation="4dp">
 
     <TextView
-        android:id="@+id/move_to_todo"
+        android:id="@+id/noti1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="Move to Todo"
-        android:drawableStart="@drawable/baseline_bookmark_border_24"
+        android:text="Project tell: Issue excel just change mode to Doing"
         android:gravity="center"
         android:clickable="true" />
     <TextView
-        android:id="@+id/move_to_doing"
+        android:id="@+id/noti2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="Move to Doing"
-        android:drawableStart="@drawable/baseline_work_outline_24"
+        android:text="Project tell: Issue word just change mode to Done"
         android:gravity="center"
         android:clickable="true"/>
 
     <TextView
-        android:id="@+id/move_to_done"
+        android:id="@+id/noti3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:gravity="center"
-        android:text="Move to Done"
-        android:drawableStart="@drawable/baseline_done_outline_24"
-        android:clickable="true"/>
-
-    <TextView
-        android:id="@+id/move_to_delete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:gravity="center"
-        android:drawableStart="@drawable/baseline_clear_24"
-        android:text="Delete"
+        android:text="Project tell: Issue powerpoint just change mode to Doing"
         android:clickable="true"/>
 </LinearLayout>

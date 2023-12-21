@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,14 +33,9 @@ import com.vn.models.Project;
  * create an instance of this fragment.
  */
 public class IssueDetailFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ISS_ID = "issueId";
-
-    // TODO: Rename and change types of parameters
     EditText titleIssueTextView;
     EditText descriptionIssue;
     DatabaseReference issueReference;
@@ -47,20 +43,9 @@ public class IssueDetailFragment extends Fragment {
     Button option;
     private String mParam1;
     private String mParam2;
-
     public IssueDetailFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment IssueDetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static IssueDetailFragment newInstance(String param1, String param2, String issueId) {
         IssueDetailFragment fragment = new IssueDetailFragment();
         Bundle args = new Bundle();
@@ -150,8 +135,6 @@ public class IssueDetailFragment extends Fragment {
     private void saveIssueData() {
         String newTitle = titleIssueTextView.getText().toString();
         String newDescription = descriptionIssue.getText().toString();
-
-        // Update the data in the database
         issueReference.child("title").setValue(newTitle);
         issueReference.child("description").setValue(newDescription);
     }
@@ -182,15 +165,24 @@ public class IssueDetailFragment extends Fragment {
         TextView mtDelete = popupView.findViewById(R.id.move_to_delete);
 
         mtTodo.setOnClickListener(v -> {
+            issueReference.child("status").setValue("TODO");
+            Toast.makeText(getContext(), "Success move to todo", Toast.LENGTH_SHORT).show();
             popupWindow.dismiss();
         });
         mtDoing.setOnClickListener(v -> {
+            issueReference.child("status").setValue("DOING");
+            Toast.makeText(getContext(), "Success move to doing", Toast.LENGTH_SHORT).show();
             popupWindow.dismiss();
         });
         mtDone.setOnClickListener(v -> {
+            issueReference.child("status").setValue("DONE");
+            Toast.makeText(getContext(), "Success move to done", Toast.LENGTH_SHORT).show();
             popupWindow.dismiss();
         });
         mtDelete.setOnClickListener(v -> {
+            issueReference.removeValue();
+            navigateBackToProjectFragment();
+            Toast.makeText(getContext(), "Delete complete", Toast.LENGTH_SHORT).show();
             popupWindow.dismiss();
         });
     }

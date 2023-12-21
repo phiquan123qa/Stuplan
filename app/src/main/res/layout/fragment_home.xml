@@ -1,15 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80dp">
+        <RelativeLayout
+            android:id="@+id/headerNavHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_header_nav"
+            app:backgroundTint = "@null">
+            <TextView
+                android:id="@+id/title_home_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                />
+            <Button
+                android:id="@+id/btn_open_notification_home"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_notification"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="40dp"
+                app:backgroundTint = "@null"
+                android:drawableTop="@drawable/baseline_notifications_24"
+                android:contentDescription = "Notification"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_holder_project_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headerNavHome"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:id="@+id/container_holder_project_list_title_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="40dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Recent Projects"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/link_from_home_to_project"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View All"
+                    android:textColor="@color/blue"
+                    />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_list_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_holder_project_list_title_link"
+                android:layout_marginTop="10sp"
+                android:orientation="horizontal"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/container_holder_issue_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container_holder_project_list"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:id="@+id/container_holder_issue_list_title_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Recent Items"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_list_issue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/container_holder_issue_list_title_link"
+                android:layout_marginTop="10sp"
+                android:orientation="vertical"/>
+        </RelativeLayout>
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Home" />
+    </RelativeLayout>
 
 </FrameLayout>

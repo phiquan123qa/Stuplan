@@ -2,11 +2,24 @@ package com.vn.appdesign;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.vn.models.Issue;
+import com.vn.models.Project;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +36,17 @@ public class SummaryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    DatabaseReference referenceProject;
+    DatabaseReference referenceIssue;
+    List<Project> listProjects;
+    List<Issue> listIssues;
+    Integer projectCount;
+    Integer issueCount;
+    Integer successIssuesCount;
+    TextView successRate;
+    TextView completeIssue;
+    TextView numberIssueTotal;
+    TextView numberProjectTotal;
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -58,7 +82,69 @@ public class SummaryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_summary, container, false);
+        View view = inflater.inflate(R.layout.fragment_summary, container, false);
+
+        listProjects = new ArrayList<>();
+        listIssues = new ArrayList<>();
+        referenceProject = FirebaseDatabase.getInstance().getReference("PROJECT");
+        referenceProject.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                projectCount = 0;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    projectCount++;
+                }
+                updateUIElementsProject(view);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        referenceIssue = FirebaseDatabase.getInstance().getReference("ISSUE");
+        referenceIssue.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                issueCount = 0;
+                successIssuesCount = 0;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    issueCount++;
+                    String status = dataSnapshot.child("status").getValue(String.class);
+                    if(status != null && "DONE".equals(status)){
+                        successIssuesCount++;
+                    }
+                }
+                updateUIElementsIssue(view);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//        int percent = successIssuesCount/issueCount*100;
+//        successRate = view.findViewById(R.id.successRate);
+//        successRate.setText(Integer.toString(percent) +"%");
+//        completeIssue = view.findViewById(R.id.complete_issue_count);
+//        completeIssue.setText(successIssuesCount.toString());
+//        numberProjectTotal = view.findViewById(R.id.project_count);
+//        numberProjectTotal.setText(projectCount.toString());
+//        numberIssueTotal = view.findViewById(R.id.issue_count);
+//        numberIssueTotal.setText(issueCount.toString());
+
+        return view;
+    }
+    private void updateUIElementsIssue(View view) {
+        int percent = (issueCount == 0) ? 0 : (successIssuesCount * 100) / issueCount;
+        successRate = view.findViewById(R.id.successRate);
+        successRate.setText(percent + "%");
+        completeIssue = view.findViewById(R.id.complete_issue_count);
+        completeIssue.setText(successIssuesCount.toString());
+        numberIssueTotal = view.findViewById(R.id.issue_count);
+        numberIssueTotal.setText(issueCount.toString());
+    }
+    private void updateUIElementsProject(View view) {
+        numberProjectTotal = view.findViewById(R.id.project_count);
+        numberProjectTotal.setText(projectCount.toString());
     }
 }

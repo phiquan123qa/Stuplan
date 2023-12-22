@@ -1,5 +1,6 @@
 package com.vn.appdesign;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -36,6 +37,7 @@ import com.vn.models.IssueStatusEnum;
 import com.vn.models.Project;
 import com.vn.utility.AdapterIssuesList;
 import com.vn.utility.AdapterProjectsList;
+import com.vn.utility.ShowDropDownMenuNoti;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,7 @@ public class IssueFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-    String projectID;
+    String projectID = null;
     RecyclerView recyclerView;
     DatabaseReference reference;
     AdapterIssuesList adapterIssuesList;
@@ -56,9 +58,10 @@ public class IssueFragment extends Fragment {
     ColorStateList def;
     TextView item1, item2, item3, select;
     Integer selectedTab;
-    private String finalProjectId;
+    String finalProjectId;
     private View view;
     SearchView searchView;
+    Button notiBtn;
 
     public IssueFragment() {
     }
@@ -78,7 +81,7 @@ public class IssueFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            String projectId = arguments.getString("projectId");
+            projectID = arguments.getString("projectId");
         }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -99,6 +102,7 @@ public class IssueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_issue, container, false);
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +134,7 @@ public class IssueFragment extends Fragment {
         }
         finalProjectId = projectId;
         item1.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View v) {
                 select.animate().x(0).setDuration(100);
@@ -143,6 +148,7 @@ public class IssueFragment extends Fragment {
             }
         });
         item2.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View v) {
                 int size = item2.getWidth();
@@ -156,6 +162,7 @@ public class IssueFragment extends Fragment {
             }
         });
         item3.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View v) {
                 int size = item3.getWidth() * 2;
@@ -175,8 +182,8 @@ public class IssueFragment extends Fragment {
         listIssues = new ArrayList<>();
         adapterIssuesList = new AdapterIssuesList(getContext(), listIssues, new AdapterIssuesList.OnItemClickListener() {
             @Override
-            public void onItemClick(String issueId) {
-                navigateToAnotherFragment(issueId);
+            public void onItemClick(String issueId, String projectId) {
+                navigateToAnotherFragment(issueId, finalProjectId);
             }
         });
         recyclerView.setAdapter(adapterIssuesList);
@@ -186,7 +193,7 @@ public class IssueFragment extends Fragment {
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateBackToProjectFragment();
+                navigateToAnotherFragmentProject();
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -222,10 +229,6 @@ public class IssueFragment extends Fragment {
 
     }
 
-    private void navigateBackToProjectFragment() {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        fragmentManager.popBackStack();
-    }
 
     private void fetchProjectName(String projectId, TextView titleTextView) {
         DatabaseReference projectReference = FirebaseDatabase.getInstance().getReference("PROJECT").child(projectId);
@@ -251,6 +254,7 @@ public class IssueFragment extends Fragment {
 
     private void updateListBasedOnSelectedTab(int selectedTab, List<Issue> listIssues, DatabaseReference reference, String finalProjectId, View view) {
         reference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Issue> newList = new ArrayList<>();
@@ -292,13 +296,33 @@ public class IssueFragment extends Fragment {
 
             }
         });
+        notiBtn = view.findViewById(R.id.btn_open_notification_Issue);
+        notiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowDropDownMenuNoti.showDropdownMenu(v);
+            }
+        });
     }
 
-    private void navigateToAnotherFragment(String issueId) {
+    private void navigateToAnotherFragment(String issueId, String projectId) {
+        saveStateToSharedPreferences(selectedTab);
         IssueDetailFragment fragment = new IssueDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString("issueId", issueId);
+        bundle.putString("projectId", projectId);
         fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void navigateToAnotherFragmentProject() {
+        saveStateToSharedPreferences(selectedTab);
+        ProjectFragment fragment = new ProjectFragment();
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -341,6 +365,7 @@ public class IssueFragment extends Fragment {
         }
         adapterIssuesList.setFilter(filteredList);
     }
+
     private void closeKeyboardInFragment() {
         View view = getView();
         if (view != null) {

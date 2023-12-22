@@ -1,5 +1,6 @@
 package com.vn.appdesign;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -49,15 +50,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -96,7 +88,7 @@ public class HomeFragment extends Fragment {
         });
         adapterIssuesList = new AdapterIssuesList(getContext(), listIssues, new AdapterIssuesList.OnItemClickListener() {
             @Override
-            public void onItemClick(String issueId) {
+            public void onItemClick(String issueId, String projectId) {
                 navigateToAnotherIssueFragment(issueId);
             }
         });
@@ -104,6 +96,7 @@ public class HomeFragment extends Fragment {
         recyclerViewIssue.setAdapter(adapterIssuesList);
         referenceProject = FirebaseDatabase.getInstance().getReference("PROJECT");
         referenceProject.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Project> newList = new ArrayList<>();
@@ -123,6 +116,7 @@ public class HomeFragment extends Fragment {
         });
         referenceIssue = FirebaseDatabase.getInstance().getReference("ISSUE");
         referenceIssue.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Issue> newList = new ArrayList<>();

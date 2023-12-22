@@ -1,8 +1,14 @@
 package com.vn.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Project {
+public class Project implements Parcelable {
     private String id;
     private String title;
     private String icon;
@@ -33,6 +39,27 @@ public class Project {
         this.ownerID = ownerID;
         this.listUser = listUser;
     }
+
+    protected Project(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        icon = in.readString();
+        issueId = in.createStringArrayList();
+        ownerID = in.readString();
+        listUser = in.createStringArrayList();
+    }
+
+    public static final Creator<Project> CREATOR = new Creator<Project>() {
+        @Override
+        public Project createFromParcel(Parcel in) {
+            return new Project(in);
+        }
+
+        @Override
+        public Project[] newArray(int size) {
+            return new Project[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -85,5 +112,20 @@ public class Project {
     @Override
     public String toString() {
         return title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(title);
+        dest.writeString(icon);
+        dest.writeStringList(issueId);
+        dest.writeString(ownerID);
+        dest.writeStringList(listUser);
     }
 }

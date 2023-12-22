@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,23 +18,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.vn.models.Issue;
 import com.vn.models.Project;
+import com.vn.utility.ShowDropDownMenuNoti;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SummaryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SummaryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+public class SummaryFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     DatabaseReference referenceProject;
@@ -47,20 +41,12 @@ public class SummaryFragment extends Fragment {
     TextView completeIssue;
     TextView numberIssueTotal;
     TextView numberProjectTotal;
+    Button notiBtn;
 
     public SummaryFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SummaryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SummaryFragment newInstance(String param1, String param2) {
         SummaryFragment fragment = new SummaryFragment();
         Bundle args = new Bundle();
@@ -91,7 +77,7 @@ public class SummaryFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 projectCount = 0;
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     projectCount++;
                 }
                 updateUIElementsProject(view);
@@ -108,32 +94,31 @@ public class SummaryFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 issueCount = 0;
                 successIssuesCount = 0;
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     issueCount++;
                     String status = dataSnapshot.child("status").getValue(String.class);
-                    if(status != null && "DONE".equals(status)){
+                    if (status != null && "DONE".equals(status)) {
                         successIssuesCount++;
                     }
                 }
                 updateUIElementsIssue(view);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-//        int percent = successIssuesCount/issueCount*100;
-//        successRate = view.findViewById(R.id.successRate);
-//        successRate.setText(Integer.toString(percent) +"%");
-//        completeIssue = view.findViewById(R.id.complete_issue_count);
-//        completeIssue.setText(successIssuesCount.toString());
-//        numberProjectTotal = view.findViewById(R.id.project_count);
-//        numberProjectTotal.setText(projectCount.toString());
-//        numberIssueTotal = view.findViewById(R.id.issue_count);
-//        numberIssueTotal.setText(issueCount.toString());
-
+        notiBtn = view.findViewById(R.id.btn_open_notification_summary);
+        notiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowDropDownMenuNoti.showDropdownMenu(v);
+            }
+        });
         return view;
     }
+
     private void updateUIElementsIssue(View view) {
         int percent = (issueCount == 0) ? 0 : (successIssuesCount * 100) / issueCount;
         successRate = view.findViewById(R.id.successRate);
@@ -143,6 +128,7 @@ public class SummaryFragment extends Fragment {
         numberIssueTotal = view.findViewById(R.id.issue_count);
         numberIssueTotal.setText(issueCount.toString());
     }
+
     private void updateUIElementsProject(View view) {
         numberProjectTotal = view.findViewById(R.id.project_count);
         numberProjectTotal.setText(projectCount.toString());

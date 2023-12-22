@@ -63,7 +63,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/container_holder_get_data_acc"
+                android:id="@+id/container_holder_get_data_acc_general"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/general_acc"
@@ -159,7 +159,7 @@
                 android:id="@+id/AboutUs_acc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/container_holder_get_data_acc"
+                android:layout_below="@+id/container_holder_get_data_acc_general"
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="10dp">
 
@@ -171,7 +171,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/container_holder_get_data_acc1"
+                android:id="@+id/container_holder_get_data_acc_about_us"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/AboutUs_acc"
@@ -309,7 +309,7 @@
                 android:id="@+id/container_holder_get_data_acc2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/container_holder_get_data_acc1"
+                android:layout_below="@+id/container_holder_get_data_acc_about_us"
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_holder_logout_btn"

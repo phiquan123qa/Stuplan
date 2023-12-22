@@ -51,7 +51,7 @@ public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.Ad
         notifyDataSetChanged();
     }
     public interface OnItemClickListener {
-        void onItemClick(String issueId);
+        void onItemClick(String issueId, String projectId);
     }
 
     public AdapterIssuesList(Context context, List<Issue> listIssues, AdapterIssuesList.OnItemClickListener listener) {
@@ -120,8 +120,7 @@ public class AdapterIssuesList extends RecyclerView.Adapter<AdapterIssuesList.Ad
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(issue.getId());
-                    Log.i("ID ISSUE",issue.getId());
+                    listener.onItemClick(issue.getId(), issue.getIdProject());
                 }
             });
         }

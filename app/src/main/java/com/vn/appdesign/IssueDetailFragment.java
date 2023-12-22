@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,6 +42,7 @@ public class IssueDetailFragment extends Fragment {
     DatabaseReference issueReference;
     Button buttonBack;
     Button option;
+    String projectId = null;
     private String mParam1;
     private String mParam2;
     public IssueDetailFragment() {
@@ -79,6 +81,7 @@ public class IssueDetailFragment extends Fragment {
         String issueId = null;
         if (arguments != null) {
             issueId = arguments.getString("issueId");
+            projectId = arguments.getString("projectId");
             if (issueId != null) {
                 fetchIssueName(issueId, titleIssueTextView, descriptionIssue);
             }
@@ -140,8 +143,16 @@ public class IssueDetailFragment extends Fragment {
     }
 
     private void navigateBackToProjectFragment() {
+        IssueFragment fragment = new IssueFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("projectId", projectId);
+        fragment.setArguments(bundle);
+
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        fragmentManager.popBackStack();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void showDropdownMenu(View anchorView) {

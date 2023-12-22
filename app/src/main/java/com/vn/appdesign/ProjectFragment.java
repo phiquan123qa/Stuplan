@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,11 +31,6 @@ import com.vn.utility.AdapterProjectsList;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProjectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProjectFragment extends Fragment {
 
     RecyclerView recyclerView;
@@ -42,7 +38,7 @@ public class ProjectFragment extends Fragment {
     AdapterProjectsList adapterProjectsList;
     List<Project> listProjects;
     SearchView searchView;
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM1 = "ProjectFragmentTag";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
@@ -63,6 +59,9 @@ public class ProjectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            listProjects = savedInstanceState.getParcelableArrayList("project");
+        }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -90,7 +89,9 @@ public class ProjectFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_list_project);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        listProjects = new ArrayList<>();
+        if(savedInstanceState==null){
+            listProjects = new ArrayList<>();
+        }
         adapterProjectsList = new AdapterProjectsList(getContext(), listProjects, new AdapterProjectsList.OnItemClickListener() {
             @Override
             public void onItemClick(String projectId) {
@@ -145,6 +146,15 @@ public class ProjectFragment extends Fragment {
                 adapterProjectsList.sortByName();
             }
         });
+        if (savedInstanceState != null) {
+            // Restore data if available
+            List<Project> savedProjects = savedInstanceState.getParcelableArrayList("projects");
+            if (savedProjects != null) {
+                listProjects.clear();
+                listProjects.addAll(savedProjects);
+                adapterProjectsList.notifyDataSetChanged();
+            }
+        }
         return view;
     }
 
@@ -180,4 +190,9 @@ public class ProjectFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("project", new ArrayList<>(listProjects));
+    }
 }

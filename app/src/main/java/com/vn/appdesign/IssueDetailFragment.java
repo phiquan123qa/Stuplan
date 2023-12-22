@@ -113,7 +113,6 @@ public class IssueDetailFragment extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -134,6 +133,7 @@ public class IssueDetailFragment extends Fragment {
             saveIssueData();
         }
     };
+
 
     private void saveIssueData() {
         String newTitle = titleIssueTextView.getText().toString();

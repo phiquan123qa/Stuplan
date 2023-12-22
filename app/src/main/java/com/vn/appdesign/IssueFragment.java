@@ -143,6 +143,7 @@ public class IssueFragment extends Fragment {
                 item3.setTextColor(def);
                 selectedTab = 0;
                 updateListBasedOnSelectedTab(selectedTab, listIssues, reference, finalProjectId, view);
+                clearSearchInput();
                 adapterIssuesList.notifyDataSetChanged();
 
             }
@@ -158,6 +159,7 @@ public class IssueFragment extends Fragment {
                 item3.setTextColor(def);
                 selectedTab = 1;
                 updateListBasedOnSelectedTab(selectedTab, listIssues, reference, finalProjectId, view);
+                clearSearchInput();
                 adapterIssuesList.notifyDataSetChanged();
             }
         });
@@ -172,6 +174,7 @@ public class IssueFragment extends Fragment {
                 item3.setTextColor(Color.WHITE);
                 selectedTab = 2;
                 updateListBasedOnSelectedTab(selectedTab, listIssues, reference, finalProjectId, view);
+                clearSearchInput();
                 adapterIssuesList.notifyDataSetChanged();
             }
         });
@@ -283,6 +286,7 @@ public class IssueFragment extends Fragment {
                 }
                 listIssues.clear();
                 listIssues.addAll(newList);
+                adapterIssuesList.setFilter(listIssues);
                 adapterIssuesList.notifyDataSetChanged();
                 if (listIssues.isEmpty() && selectedTab == 0) {
                     showEmptyIssuesNotification(view, 1);
@@ -372,5 +376,10 @@ public class IssueFragment extends Fragment {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+    private void clearSearchInput(){
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
+        searchView.clearFocus();
     }
 }
